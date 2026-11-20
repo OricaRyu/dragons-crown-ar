@@ -1,0 +1,88 @@
+:root {
+  --gold: #e8b64c;
+  --gold-dark: #9a6b1c;
+  --parch: #f3e6c4;
+  --ink: #2b1b0e;
+  --blood: #b3261e;
+}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body {
+  margin: 0; height: 100%; overflow: hidden;
+  background: #120c07; color: var(--parch);
+  font-family: "Crimson Text", Georgia, serif;
+}
+
+#camera {
+  position: fixed; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; z-index: 0; background: #120c07;
+}
+a-scene { position: fixed !important; inset: 0; width: 100%; height: 100%; z-index: 1; }
+a-scene canvas { background: transparent !important; }
+
+.hidden { display: none !important; }
+.a-enter-vr, .a-enter-ar, .a-orientation-modal { display: none !important; }
+
+/* ---------- HUD ---------- */
+#hud { position: fixed; inset: 0; z-index: 5; pointer-events: none; }
+.scroll {
+  position: absolute; left: 50%; bottom: max(24px, env(safe-area-inset-bottom));
+  transform: translateX(-50%); width: min(92vw, 460px);
+  padding: 12px 18px; text-align: center; font-size: 19px; font-weight: 600;
+  color: var(--ink); background: var(--parch);
+  border: 3px solid var(--gold-dark); border-radius: 8px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.5);
+}
+.scroll.pop { animation: pop .35s ease; }
+@keyframes pop { 0% { transform: translateX(-50%) scale(.9); } 60% { transform: translateX(-50%) scale(1.05); } 100% { transform: translateX(-50%) scale(1); } }
+
+#boss { position: absolute; top: max(16px, env(safe-area-inset-top)); left: 50%; transform: translateX(-50%); width: min(90vw, 420px); text-align: center; }
+.boss-name { font-family: Cinzel, serif; font-weight: 800; letter-spacing: 1px; text-shadow: 0 2px 6px #000; margin-bottom: 4px; }
+.bar { height: 16px; border: 2px solid var(--gold); border-radius: 10px; background: rgba(0,0,0,.6); overflow: hidden; }
+#boss-hp { height: 100%; width: 100%; background: linear-gradient(90deg, #7a0f0a, var(--blood), #e2523f); transition: width .25s ease; }
+
+#hint {
+  position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%);
+  font-family: Cinzel, serif; font-size: 20px; text-shadow: 0 2px 8px #000;
+  animation: pulse 1.2s infinite alternate;
+}
+@keyframes pulse { from { opacity: .45; } to { opacity: 1; } }
+
+#flash { position: fixed; inset: 0; z-index: 6; pointer-events: none; background: #fff; opacity: 0; transition: opacity .25s; }
+#flash.on { opacity: .55; transition: none; }
+#flash.red { background: var(--blood); }
+
+/* ---------- Screens ---------- */
+.screen {
+  position: fixed; inset: 0; z-index: 10; display: flex; align-items: center; justify-content: center;
+  padding: 16px; overflow-y: auto;
+  background: radial-gradient(ellipse at center, rgba(40,24,10,.92), rgba(8,5,2,.97));
+}
+.panel {
+  width: min(100%, 440px); text-align: center; padding: 26px 22px;
+  background: linear-gradient(#f6ebcd, #e6d3a3); color: var(--ink);
+  border: 4px double var(--gold-dark); border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0,0,0,.6);
+}
+.crest { font-size: 46px; line-height: 1; color: var(--gold-dark); }
+h1, h2 { font-family: Cinzel, serif; font-weight: 800; margin: 8px 0 2px; color: #5a2d0c; }
+h1 { font-size: 30px; }
+.sub { font-family: Cinzel, serif; font-weight: 600; margin: 0 0 12px; color: var(--gold-dark); }
+.panel p { font-size: 17px; margin: 8px 0; }
+.small { font-size: 14px !important; opacity: .8; }
+.how { text-align: left; padding-left: 22px; margin: 12px 0; font-size: 16px; }
+.how li { margin: 4px 0; }
+button {
+  display: block; width: 100%; margin: 14px 0 6px; padding: 14px;
+  font-family: Cinzel, serif; font-weight: 800; font-size: 18px; letter-spacing: 1px;
+  color: #2b1b0e; background: linear-gradient(#f5d27a, var(--gold));
+  border: 2px solid var(--gold-dark); border-radius: 8px; cursor: pointer;
+  box-shadow: 0 4px 0 var(--gold-dark);
+}
+button:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--gold-dark); }
+button:disabled { opacity: .6; }
+button.ghost { background: transparent; box-shadow: none; font-size: 15px; padding: 10px; }
+#qr { display: flex; justify-content: center; margin: 14px auto 4px; padding: 10px; background: #fff; width: max-content; border-radius: 6px; border: 2px solid var(--gold-dark); }
+#qr img, #qr canvas { width: 180px; height: 180px; }
+.credits { text-align: left; font-size: 15px; padding-left: 20px; }
+.credits li { margin: 6px 0; }
+.credits a, .panel a { color: #5a2d0c; }

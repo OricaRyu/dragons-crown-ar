@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>The Dragon's Crown – AR Quest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Crimson+Text:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/aframe@1.7.0/dist/aframe-v1.7.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aframe-extras@7.5.4/dist/aframe-extras.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+  <!-- Live camera feed sits behind the transparent 3D scene = AR -->
+  <video id="camera" playsinline muted autoplay></video>
+
+  <a-scene id="scene"
+           renderer="alpha: true; antialias: true; colorManagement: true"
+           vr-mode-ui="enabled: false"
+           device-orientation-permission-ui="enabled: false"
+           loading-screen="enabled: false"
+           embedded>
+    <a-assets timeout="15000">
+      <a-asset-item id="chest-model" src="models/chest.glb"></a-asset-item>
+      <a-asset-item id="key-model" src="models/key.glb"></a-asset-item>
+      <a-asset-item id="dragon-model" src="models/dragon.glb"></a-asset-item>
+      <a-asset-item id="crown-model" src="models/crown.glb"></a-asset-item>
+    </a-assets>
+
+    <a-entity light="type: ambient; intensity: 1.1; color: #fff6e0"></a-entity>
+    <a-entity light="type: directional; intensity: 1.6; color: #ffe2b0" position="2 4 3"></a-entity>
+
+    <!-- Player camera: rotates with the phone's gyroscope (or mouse drag on desktop) -->
+    <a-entity id="rig">
+      <a-camera id="cam" position="0 1.6 0" wasd-controls="enabled: false"
+                look-controls="magicWindowTrackingEnabled: true; touchEnabled: false; pointerLockEnabled: false"
+                cursor="rayOrigin: mouse; fuse: false"
+                raycaster="objects: .clickable; far: 30"></a-camera>
+    </a-entity>
+
+    <!-- Game world, built by game.js -->
+    <a-entity id="world" position="0 0 0"></a-entity>
+  </a-scene>
+
+  <!-- HUD -->
+  <div id="hud" class="hidden">
+    <div id="message" class="scroll">Tap a chest to begin...</div>
+    <div id="boss" class="hidden">
+      <div class="boss-name">Vermithrax the Wyrm</div>
+      <div class="bar"><div id="boss-hp"></div></div>
+    </div>
+    <div id="hint" class="hidden">Turn around to find the dragon! &#8634;</div>
+  </div>
+  <div id="flash"></div>
+
+  <!-- Start screen -->
+  <section id="start" class="screen">
+    <div class="panel">
+      <div class="crest">&#9876;</div>
+      <h1>The Dragon's Crown</h1>
+      <p class="sub">An Augmented Reality Quest</p>
+      <p>A dragon has stolen the King's crown. Find the key, slay the beast, and bring the crown home.</p>
+      <ol class="how">
+        <li><b>Search</b>: tap the chests to find the golden key.</li>
+        <li><b>Battle</b>: turn around to find the dragon, then tap it to strike.</li>
+        <li><b>Claim</b>: take the crown and save the kingdom.</li>
+      </ol>
+      <button id="start-btn">Begin the Quest</button>
+      <p class="small">Allow camera &amp; motion access when asked. Best in an open space.</p>
+      <p id="load-status" class="small"></p>
+    </div>
+  </section>
+
+  <!-- Victory screen with QR code -->
+  <section id="victory" class="screen hidden">
+    <div class="panel">
+      <div class="crest">&#9819;</div>
+      <h1>Victory!</h1>
+      <p class="sub">You saved the kingdom</p>
+      <p id="stats"></p>
+      <div id="qr"></div>
+      <p class="small">Scan to share the quest with a friend</p>
+      <button id="again-btn">Play Again</button>
+      <button id="credits-btn" class="ghost">Credits</button>
+    </div>
+  </section>
+
+  <!-- Credits (CC Attribution requires this) -->
+  <section id="credits" class="screen hidden">
+    <div class="panel">
+      <h2>Credits</h2>
+      <p class="small">3D models from Sketchfab, licensed under
+        <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>:</p>
+      <ul class="credits">
+        <li><a href="https://sketchfab.com/3d-models/low-poly-treasure-chest-ca63751326084866b8df9a6b4c196b3d" target="_blank" rel="noopener">"Low poly treasure chest"</a> by cattleya</li>
+        <li><a href="https://sketchfab.com/3d-models/low-poly-key-32920cedbf3242578db1204abfc3aad7" target="_blank" rel="noopener">"Low Poly Key"</a> by Spagheti</li>
+        <li><a href="https://sketchfab.com/3d-models/low-poly-flying-dragon-811f651584814044acfaa47546ec882d" target="_blank" rel="noopener">"Low Poly Flying Dragon"</a> by CarolaBug</li>
+        <li><a href="https://sketchfab.com/3d-models/crown-rich-gold-a01505c752944647956037757a1a93f7" target="_blank" rel="noopener">"Crown rich (gold)"</a> by Mister-Smash</li>
+      </ul>
+      <p class="small">Built with A-Frame. Models resized for the game.</p>
+      <button id="back-btn">Back</button>
+    </div>
+  </section>
+
+  <script src="game.js"></script>
+</body>
+</html>
